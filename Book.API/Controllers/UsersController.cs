@@ -36,7 +36,9 @@ namespace Book.API.Controllers
             var user = new AppUser
             {
                 UserName = model.UserName,
-                Email = model.Email
+                Email = model.Email,
+                FullName = model.FullName,
+                DateAdded = DateTime.Now
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

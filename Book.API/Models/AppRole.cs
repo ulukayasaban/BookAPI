@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Book.API.Models
 {
-    public class AppRole : IdentityRole<string>
+    public class AppRole : IdentityRole
     {
         
     }
