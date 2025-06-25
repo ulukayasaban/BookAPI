@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Book.API.Dto;
 using Book.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Book.API.Controllers
 {
@@ -16,10 +20,12 @@ namespace Book.API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
     
+        private readonly IConfiguration _configuration;
         public UsersController(UserManager<AppUser> userManager,SignInManager<AppUser> signInManager,IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -67,12 +73,35 @@ namespace Book.API.Controllers
 
             if(result.Succeeded)
             {
-                return Ok();
-                //JWT
+                return Ok(new {token = GenerateJWT(user)});
+                
             }
             
             return Unauthorized();
 
+        }
+
+        private object GenerateJWT(AppUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("appsettings:Secret").Value ?? "");
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(
+                    new Claim[] {
+                        new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                        new Claim(ClaimTypes.Name,user.UserName ?? "")
+                    }
+                ),
+
+                Expires = DateTime.UtcNow.AddDays(1), 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature),
+                Issuer = "sabanulukaya.com"
+            };
+            
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     
     }

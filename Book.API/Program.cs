@@ -1,11 +1,14 @@
+using System.Text;
 using Book.API.Data;
 using Book.API.Mappings;
 using Book.API.Models;
 using Book.API.Repositories;
 using Book.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var MyAllowSpecificOrigins="_myAllowSpecificOrigins";
 
@@ -42,6 +45,26 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 });
 
+builder.Services.AddAuthentication(x => {
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(x => 
+{
+    x.RequireHttpsMetadata = false;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidIssuer="sabanulukaya.com",
+        ValidateAudience = false,
+        ValidAudience="CompanyName",
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("appsettings:Secret").Value ?? "")),
+
+        ValidateLifetime = true 
+    };
+});
+
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -72,6 +95,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
