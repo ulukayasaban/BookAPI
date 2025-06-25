@@ -1,0 +1,77 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# .NET Core
+*.dbmdl
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.vssscc
+*.ncb
+*.sdf
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+# Uncomment if you have tasks that download packages to the project folder
+# /packages/*
+
+# Resharper
+*.DotSettings.user
+
+# Rider
+.idea/
+*.sln.iml
+
+# dotCover
+*.dcvr
+
+# OS junk files
+[Tt]humbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Others
+*.sqlite
+*.db
+*.bak
+*.tmp
+*.temp
+*.pid
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Global.json SDK cache
+global.json.sdk.json
