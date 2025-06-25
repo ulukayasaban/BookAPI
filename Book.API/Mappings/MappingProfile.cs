@@ -13,6 +13,8 @@ namespace Book.API.Mappings
         public MappingProfile()
         {
             CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+
         }
     }
 }

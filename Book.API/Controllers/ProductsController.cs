@@ -51,7 +51,7 @@ namespace Book.API.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] ProductDto dto)
         {
             if (id != dto.ProductId)
-                return BadRequest("ID mismatch.");
+                return BadRequest("ID uyuşmazlıgı.");
 
             var result = await _productService.UpdateAsync(dto);
             if (!result)

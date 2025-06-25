@@ -21,12 +21,22 @@ namespace Book.API.Data
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 1, ProductName ="Kitap 1", Price=10});
-            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 2, ProductName ="Kitap 2", Price=20});
-            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 3, ProductName ="Kitap 3", Price=30});
+            modelBuilder.Entity<Category>().HasData(
+                new Category { Id = 1, Name = "Roman" },
+                new Category { Id = 2, Name = "Bilim" }
+            );
+
+            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 1, ProductName ="Kitap 1", Price=10, CategoryId = 1});
+            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 2, ProductName ="Kitap 2", Price=20, CategoryId = 1});
+            modelBuilder.Entity<Product>().HasData( new Product() { ProductId = 3, ProductName ="Kitap 3", Price=30, CategoryId = 2});
                 
+            
+
+           
         }
         
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
     }
 }
