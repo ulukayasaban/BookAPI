@@ -6,6 +6,7 @@ using Book.API.Middleware;
 using Book.API.Models;
 using Book.API.Repositories;
 using Book.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -70,6 +71,8 @@ builder.Services.AddAuthentication(x => {
         ValidateLifetime = true 
     };
 });
+
+builder.Services.AddMediatR(typeof(Program));
 
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Book.API.Application.Products.Commands;
+using Book.API.Application.Products.Queries;
 using Book.API.Dto;
 using Book.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Book.API.Controllers
@@ -13,12 +16,15 @@ namespace Book.API.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
-        private readonly ILogger<ProductsController> _logger; // ✅ logger tanımı
+        private readonly ILogger<ProductsController> _logger; 
+        private readonly IMediator _mediator;
 
-        public ProductsController(ProductService productService, ILogger<ProductsController> logger)
+
+        public ProductsController(ProductService productService, ILogger<ProductsController> logger, IMediator mediator)
         {
             _productService = productService;
             _logger = logger;
+            _mediator = mediator;
         }
         // GET: api/products
 
@@ -26,8 +32,8 @@ namespace Book.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             _logger.LogInformation("Tüm ürünler API üzerinden isteniyor.");
-            var products = await _productService.GetAllAsync();
-            return Ok(products);
+            var result = await _mediator.Send(new GetAllProductsQuery());
+            return Ok(result);
         }
 
             // GET: api/products/{id}
@@ -35,14 +41,14 @@ namespace Book.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             _logger.LogInformation("Ürün detay isteniyor, ID: {ProductId}", id);
-            var product = await _productService.GetByIdAsync(id);
-            if (product == null)
+            var result = await _mediator.Send(new GetProductByIdQuery(id));
+            if (result == null)
             {
                 _logger.LogWarning("Ürün bulunamadı, ID: {ProductId}", id);
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(result); 
         }
         // POST: api/products
 
@@ -50,8 +56,8 @@ namespace Book.API.Controllers
         public async Task<IActionResult> Create([FromBody] ProductDto dto)
         {
             _logger.LogInformation("Yeni ürün oluşturma isteği: {@Product}", dto);
-            await _productService.AddAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = dto.ProductId }, dto);
+            var result = await _mediator.Send(new CreateProductCommand(dto));
+            return CreatedAtAction(nameof(GetById), new { id = result.ProductId }, result);
         }
         // PUT: api/products/{id}
 
@@ -64,7 +70,7 @@ namespace Book.API.Controllers
                 return BadRequest("ID uyuşmazlıgı.");
             }
 
-            var result = await _productService.UpdateAsync(dto);
+            var result = await _mediator.Send(new UpdateProductCommand(dto));
             if (!result)
             {
                 _logger.LogWarning("Güncelleme yapılamadı, ürün bulunamadı: {ProductId}", id);
@@ -79,14 +85,14 @@ namespace Book.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             _logger.LogInformation("Ürün silme isteği alındı, ID: {ProductId}", id);
-            var result = await _productService.DeleteAsync(id);
+            var result = await _mediator.Send(new DeleteProductCommand(id));
             if (!result)
             {
                 _logger.LogWarning("Silme işlemi başarısız, ürün yok: {ProductId}", id);
                 return NotFound();
             }
 
-            return NoContent();
+            return NoContent(); 
         }
     }
 }

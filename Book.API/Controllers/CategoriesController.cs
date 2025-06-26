@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Book.API.Application.Categories.Commands;
+using Book.API.Application.Categories.Queries;
 using Book.API.Dto;
 using Book.API.Services;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Book.API.Controllers
@@ -15,10 +18,12 @@ namespace Book.API.Controllers
         private readonly CategoryService _categoryService;
         private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(CategoryService categoryService, ILogger<CategoriesController> logger)
+        private readonly IMediator _mediator;
+        public CategoriesController(CategoryService categoryService, ILogger<CategoriesController> logger, IMediator mediator)
         {
             _categoryService = categoryService;
             _logger = logger;
+            _mediator = mediator;
         }
 
         // GET: api/categories
@@ -26,8 +31,8 @@ namespace Book.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             _logger.LogInformation("Tüm kategoriler API'den isteniyor.");
-            var categories = await _categoryService.GetAllAsync();
-            return Ok(categories);
+            var result = await _mediator.Send(new GetAllCategoriesQuery());
+            return Ok(result);
         }
 
         // GET: api/categories/{id}
@@ -35,14 +40,14 @@ namespace Book.API.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             _logger.LogInformation("Kategori detay API isteği: {CategoryId}", id);
-            var category = await _categoryService.GetByIdAsync(id);
-            if (category == null)
+            var result = await _mediator.Send(new GetCategoryByIdQuery(id));
+            if (result == null)
             {
                 _logger.LogWarning("Kategori bulunamadı: {CategoryId}", id);
                 return NotFound();
             }
 
-            return Ok(category);
+            return Ok(result); 
         }
 
         // POST: api/categories
@@ -50,8 +55,8 @@ namespace Book.API.Controllers
         public async Task<IActionResult> Create([FromBody] CategoryDto dto)
         {
             _logger.LogInformation("Yeni kategori oluşturuluyor: {@Category}", dto);
-            await _categoryService.AddAsync(dto);
-            return Ok(dto);
+            var result = await _mediator.Send(new CreateCategoryCommand(dto));
+            return Ok(result);
         }
 
         // PUT: api/categories/{id}
@@ -64,7 +69,7 @@ namespace Book.API.Controllers
                 return BadRequest("ID uyuşmazlığı.");
             }
 
-            var result = await _categoryService.UpdateAsync(dto);
+            var result = await _mediator.Send(new UpdateCategoryCommand(dto));
             if (!result)
             {
                 _logger.LogWarning("Kategori bulunamadı, güncellenemedi: {CategoryId}", id);
@@ -79,14 +84,14 @@ namespace Book.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             _logger.LogInformation("Kategori silme isteği alındı: {CategoryId}", id);
-            var result = await _categoryService.DeleteAsync(id);
+            var result = await _mediator.Send(new DeleteCategoryCommand(id));
             if (!result)
             {
                 _logger.LogWarning("Kategori silinemedi, bulunamadı: {CategoryId}", id);
                 return NotFound();
             }
 
-            return NoContent();
+            return NoContent(); 
         }
     
     }
