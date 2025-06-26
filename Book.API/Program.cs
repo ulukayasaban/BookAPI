@@ -1,6 +1,8 @@
 using System.Text;
 using Book.API.Data;
+using Book.API.Logging;
 using Book.API.Mappings;
+using Book.API.Middleware;
 using Book.API.Models;
 using Book.API.Repositories;
 using Book.API.Services;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var MyAllowSpecificOrigins="_myAllowSpecificOrigins";
 
@@ -25,6 +28,9 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod();
     });
 });
+
+SerilogConfig.ConfigureLogger(builder.Configuration);
+builder.Host.UseSerilog();
 
 builder.Services.AddDbContext<AppDbContext>(x => x.UseSqlite("Data Source=products.db"));
 builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppDbContext>();
@@ -93,7 +99,8 @@ if (app.Environment.IsDevelopment())
 }
 
 
-//app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthentication();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseRouting();
