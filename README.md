@@ -18,6 +18,39 @@ ASP.NET Core 9.0 ile geliştirilmiş, SQLite veritabanı kullanan, JWT Authentic
 - ✅ Kod kapsama (coverage) takibi
 
 ---
+## 🧱 Proje Yapısı
+```css
+📁 Book
+├── 📁 Book.API                     # Ana Web API projesi
+│   ├── Application/                # CQRS komut ve handler'ları
+│   ├── Controllers/                # API Controller'lar
+│   ├── Data/                       # AppDbContext ve veritabanı işlemleri
+│   ├── Domain/                     # Entity modelleri ve domain kuralları
+│   ├── Dto/                        # Veri transfer nesneleri
+│   ├── Infrastructure/             # Cross-cutting concern'ler (örnek: servisler)
+│   ├── Logging/                    # ConsoleLogger gibi özel loglama sınıfları
+│   ├── Mappings/                   # AutoMapper profilleri
+│   ├── Middleware/                 # Hata yakalama gibi özel middleware'ler
+│   ├── Migrations/                 # EF Core migration dosyaları
+│   ├── Models/                     # DTO dışında kullanılan yardımcı modeller
+│   ├── Services/                   # Business logic servisleri
+│   ├── appsettings.json            # Ortak ayarlar (JWT, connection string vs.)
+│   ├── Program.cs                  # Service registration + middleware pipeline
+│   └── Book.API.http               # HTTP test istekleri
+│
+├── 📁 Book.API.Tests               # Birim test projeleri
+│   ├── Categories/                 # Kategori testleri
+│   ├── Controllers/                # Controller testleri
+│   ├── Data/                       # In-memory context testleri
+│   ├── Helpers/                    # InMemoryDbHelper, MapperHelper vb.
+│   ├── Mocks/                      # IConfiguration, ILogger mockları
+│   ├── Products/                   # Ürün testleri
+│   ├── Repositories/               # Repository katmanı testleri
+│   ├── TestResults/                # Test çıktılarının tutulduğu dizin
+│   ├── appsettings.json            # Test ortamı için JWT secret ve benzeri
+│   └── Usings.cs                   # Global using tanımları 
+```
+---
 
 ## 🔐 Identity Şifre Kuralları
 
@@ -55,7 +88,7 @@ Swagger UI → http://localhost:5011/swagger/index.html
 -   `POST /api/users/login` → JWT token alımı
 JWT token, `Authorization` header'ı ile gönderilmelidir:
 -   Kullanıcı girişinde token döndürülür.
--   Token, `appsettings.json` dosyasındaki `Secret` değeri ile HMAC-SHA256 algoritması kullanılarak imzalanır.##
+-   Token, `appsettings.json` dosyasındaki `Secret` değeri ile HMAC-SHA256 algoritması kullanılarak imzalanır.
 ##  ⚠️ JWT ayarları
 `Program.cs` içinde tanımlanmıştır:
 ```csharp
@@ -106,36 +139,4 @@ dotnet test --collect:"XPlat Code Coverage"
 ### 🧷 Coverage Raporunu Görüntülemek:
 ```bash
 reportgenerator -reports:./**/coverage.cobertura.xml -targetdir:coveragereport
-```
-## 🧱 Proje Yapısı
-```css
-📁 Book
-├── 📁 Book.API                      # Ana Web API projesi
-│   ├── Application/                # CQRS komut ve handler'ları
-│   ├── Controllers/                # API Controller'lar
-│   ├── Data/                       # AppDbContext ve veritabanı işlemleri
-│   ├── Domain/                     # Entity modelleri ve domain kuralları
-│   ├── Dto/                        # Veri transfer nesneleri
-│   ├── Infrastructure/            # Cross-cutting concern'ler (örnek: servisler)
-│   ├── Logging/                   # ConsoleLogger gibi özel loglama sınıfları
-│   ├── Mappings/                  # AutoMapper profilleri
-│   ├── Middleware/                # Hata yakalama gibi özel middleware'ler
-│   ├── Migrations/                # EF Core migration dosyaları
-│   ├── Models/                    # DTO dışında kullanılan yardımcı modeller
-│   ├── Services/                  # Business logic servisleri
-│   ├── appsettings.json           # Ortak ayarlar (JWT, connection string vs.)
-│   ├── Program.cs                 # Service registration + middleware pipeline
-│   └── Book.API.http              # HTTP test istekleri
-│
-├── 📁 Book.API.Tests               # Birim test projeleri
-│   ├── Categories/                # Kategori testleri
-│   ├── Controllers/               # Controller testleri (özellikle Login)
-│   ├── Data/                      # In-memory context testleri
-│   ├── Helpers/                   # InMemoryDbHelper, MapperHelper vb.
-│   ├── Mocks/                     # IConfiguration, ILogger mockları
-│   ├── Products/                  # Ürün testleri
-│   ├── Repositories/             # Repository katmanı testleri
-│   ├── TestResults/              # Test çıktılarının tutulduğu dizin
-│   ├── appsettings.json          # Test ortamı için JWT secret ve benzeri
-│   └── Usings.cs                 # Global using tanımları (C# 10+ özelliği)
 ```
