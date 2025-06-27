@@ -4,9 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Book.API.Application.Products.Commands;
+using Book.API.Domain;
 using Book.API.Dto;
+using Book.API.Infrastructure.Repositories;
 using Book.API.Models;
-using Book.API.Repositories;
 using MediatR;
 
 namespace Book.API.Application.Products.Handlers

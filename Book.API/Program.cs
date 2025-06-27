@@ -4,7 +4,7 @@ using Book.API.Logging;
 using Book.API.Mappings;
 using Book.API.Middleware;
 using Book.API.Models;
-using Book.API.Repositories;
+using Book.API.Infrastructure.Repositories;
 using Book.API.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

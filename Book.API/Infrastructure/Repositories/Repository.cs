@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Book.API.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Book.API.Repositories
+namespace Book.API.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {

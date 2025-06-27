@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Book.API.Application.Products.Queries;
 using Book.API.Dto;
-using Book.API.Repositories;
+using Book.API.Infrastructure.Repositories;
 using MediatR;
 
 namespace Book.API.Application.Products.Handlers

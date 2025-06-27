@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Book.API.Domain;
 using Book.API.Dto;
+using Book.API.Infrastructure.Repositories;
 using Book.API.Models;
-using Book.API.Repositories;
 
 namespace Book.API.Services
 {

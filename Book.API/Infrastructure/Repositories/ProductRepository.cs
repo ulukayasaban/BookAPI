@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Book.API.Data;
-using Book.API.Models;
+using Book.API.Domain;
 
-namespace Book.API.Repositories
+namespace Book.API.Infrastructure.Repositories
 {
     public class ProductRepository: Repository<Product>, IProductRepository
     {

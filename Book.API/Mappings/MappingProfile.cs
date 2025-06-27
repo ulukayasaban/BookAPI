@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Book.API.Domain;
 using Book.API.Dto;
 using Book.API.Models;
 

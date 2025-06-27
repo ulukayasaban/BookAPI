@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Book.API.Application.Categories.Commands;
-using Book.API.Repositories;
+using Book.API.Infrastructure.Repositories;
 using MediatR;
 
 namespace Book.API.Application.Categories.Handlers

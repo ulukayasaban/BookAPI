@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Book.API.Models
+namespace Book.API.Domain
 {
     public class Product
     {

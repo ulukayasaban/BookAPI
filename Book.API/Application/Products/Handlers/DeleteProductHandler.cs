@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Book.API.Application.Products.Commands;
-using Book.API.Repositories;
+using Book.API.Infrastructure.Repositories;
 using MediatR;
 
 namespace Book.API.Application.Products.Handlers
